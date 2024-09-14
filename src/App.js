@@ -1,8 +1,8 @@
 import React from "react";
 import FirstPage from "./Components/FirstPage/FirstPage";
-import Registration from "./Components/Registration/Registration";
+import Registration from "./Components/RegistrationLogin/Registration";
 import { Routes, Route } from "react-router-dom";
-import Login from "./Components/Login/Login";
+import Login from "./Components/RegistrationLogin/Login";
 
 function App() {
   return (
