@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Обязательное поле"),
+  userName: Yup.string().required("Обязательное поле"),
   phoneNumber: Yup.string()
     .matches(/^\+?\d{10,12}$/, "Неверный формат номера телефона")
     .required("Обязательное поле"),

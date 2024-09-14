@@ -5,6 +5,7 @@ import styles from "./registration.module.css";
 import Logo from "../Logo/Logo";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Обязательное поле"),  
@@ -13,19 +14,32 @@ const validationSchema = Yup.object({
     .required("Обязательное поле"),
 });
 
-// Сдесь будет запрос на сервер и дальнейшее сохраннение базы данных
+const serverBaseUrl = `${process.env.REACT_APP_SERVER_BASE_URL}/AuthUser/Login`;
 const Login = () => {
-  const handleSubmit = (values) => {
-    console.log(values);
-  };
+    const handleSubmit = async (values) => {
+      try {
+        // Создаем объект с данными для отправки
+        const dataToSend = {
+          username: values.username,
+          password: values.password,
+        };        
+        // Отправляем POST-запрос на сервер
+        const response = await axios.post(serverBaseUrl, dataToSend);
+
+        // Обрабатываем ответ от сервера
+        console.log("Ответ от сервера:", response.data);
+      } catch (error) {
+        console.error("Ошибка при отправке запроса:", error);
+      }
+    };
 
   return (
     <div className={styles.conteiner}>
       <Logo />
       <Formik
         initialValues={{
-          username: "",          
-          password: "",          
+          username: "",
+          password: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -58,7 +72,7 @@ const Login = () => {
               <div className={styles.error}>
                 <ErrorMessage name="password" component="div" />
               </div>
-            </div>                       
+            </div>
           </div>
           <div className={styles.submitWrapper}>
             <Button type="submit">Войти</Button>
