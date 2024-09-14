@@ -1,0 +1,27 @@
+.logo{
+    display: inline;
+    height: 50vh;
+    width: 100%;
+    padding: 1vh 30%;
+    animation: myAnim 2s linear 0s 1 normal backwards;
+}
+@keyframes myAnim {
+    0% {
+        transform: scale(0.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 1024px) {
+    .logo{
+        padding: 1vh 10%;
+        
+    }
+}
+
+
+
+

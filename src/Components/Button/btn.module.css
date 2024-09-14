@@ -1,0 +1,29 @@
+.btn {
+    cursor: pointer;
+    border: 11px solid rgb(61, 204, 0);
+    font-family: "system-ui";
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    padding: 10px 30px;
+    transition: 310ms;
+    width: 299px;
+    box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+    border-radius: 0px 8px 8px;
+    background: linear-gradient(291deg, rgb(0, 54, 204) 0%, rgb(197, 0, 204) 91%);
+    font-weight: 300;
+    --hover-bgc: #70bd77;
+    --hover-borderSize: 16px;
+    --hover-width: 400px;
+    --hover-color: #cc5c00;
+    --hover-borderc: #00cc36;
+
+}
+
+.btn:hover {
+    color: rgb(204, 92, 0);
+    width: 400px;
+    background: rgb(112, 189, 119) none repeat scroll 0% 0% / auto padding-box border-box;
+    border-color: rgb(0, 204, 54);
+    border-width: 16px;
+    border-style: solid;
+}
