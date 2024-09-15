@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import styles from "./registration.module.css";
 import Logo from "../Logo/Logo";
 import Button from "../Button/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const validationSchema = Yup.object({
@@ -15,23 +15,26 @@ const validationSchema = Yup.object({
 });
 
 const serverBaseUrl = `${process.env.REACT_APP_SERVER_BASE_URL}/AuthUser/Login`;
-const Login = () => {
-    const handleSubmit = async (values) => {
-      try {
-        // Создаем объект с данными для отправки
-        const dataToSend = {
-          username: values.username,
-          password: values.password,
-        };        
-        // Отправляем POST-запрос на сервер
-        const response = await axios.post(serverBaseUrl, dataToSend);
+const Login = ({ SetIsLogin }) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (values) => {
+    try {
+      // Создаем объект с данными для отправки
+      const dataToSend = {
+        username: values.username,
+        password: values.password,
+      };
+      // Отправляем POST-запрос на сервер
+      const response = await axios.post(serverBaseUrl, dataToSend);
 
-        // Обрабатываем ответ от сервера
-        console.log("Ответ от сервера:", response.data);
-      } catch (error) {
-        console.error("Ошибка при отправке запроса:", error);
-      }
-    };
+      // Обрабатываем ответ от сервера
+      console.log("Ответ от сервера:", response.data);
+      SetIsLogin(response.data);
+      navigate("/");
+    } catch (error) {
+      console.error("Ошибка при отправке запроса:", error);
+    }
+  };
 
   return (
     <div className={styles.conteiner}>
