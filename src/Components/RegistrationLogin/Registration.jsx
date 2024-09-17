@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from './registration.module.css'
 import Logo from '../Logo/Logo'
 import Button from "../Button/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registrationUrl } from "../../Endpoints/endpoints";
+import axios from "axios";
 
 
 const validationSchema = Yup.object({
-  userName: Yup.string().required("Обязательное поле"),
+  username: Yup.string().required("Обязательное поле"),
   phoneNumber: Yup.string()
     .matches(/^\+?\d{10,12}$/, "Неверный формат номера телефона")
     .required("Обязательное поле"),
@@ -19,16 +21,33 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
     .required("Обязательное поле"),
 });
-
-// Сдесь будет запрос на сервер и дальнейшее сохраннение базы данных
 const Registration = () => {
-  const handleSubmit = (values) => {
-    console.log(values);
+  const [errorMessage, setErrorMessage] = useState('')
+  const navigate = useNavigate();
+  const handleSubmit = async (values) => {    
+    try {      
+      const dataToSend = {
+        username: values.username,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        phoneNumber: values.phoneNumber,
+      };
+     
+      const response = await axios.post(registrationUrl, dataToSend);
+
+      if (response.status === 200) {
+        setErrorMessage('')
+        navigate("/login");
+      }
+    } catch (error) {
+      setErrorMessage(error.response.data.error);
+    }
   };
 
   return (
     <div className={styles.conteiner}>
       <Logo />
+        <h2 className={styles.errorMessage}>{errorMessage}</h2>
       <Formik
         initialValues={{
           username: "",
@@ -75,6 +94,7 @@ const Registration = () => {
                   type="password"
                   name="password"
                   placeholder="Пароль"
+                  autoComplete="off"
                   className={styles.input}
                 />
               </div>
@@ -89,6 +109,7 @@ const Registration = () => {
                   type="password"
                   name="confirmPassword"
                   placeholder="Повторите пароль"
+                  autoComplete="off"
                   className={styles.input}
                 />
               </div>
@@ -97,11 +118,13 @@ const Registration = () => {
               </div>
             </div>
           </div>
+
           <div className={styles.submitWrapper}>
             <Button type="submit">Зарегистрироваться</Button>
           </div>
         </Form>
       </Formik>
+
       <Link to="/">
         <div className={styles.home}>
           <Button>На главную</Button>

@@ -63,3 +63,6 @@
     top: 20px;
     left: 0;    
 }
+.errorMessage{
+    padding: 20px 0;
+}

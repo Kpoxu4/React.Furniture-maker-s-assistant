@@ -6,31 +6,33 @@ import Logo from "../Logo/Logo";
 import Button from "../Button/Button";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { loginUrl } from "../../Endpoints/endpoints";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Обязательное поле"),  
+  username: Yup.string().required("Обязательное поле"),
   password: Yup.string()
     .min(6, "Пароль должен содержать минимум 6 символов")
     .required("Обязательное поле"),
 });
 
-const serverBaseUrl = `${process.env.REACT_APP_SERVER_BASE_URL}/AuthUser/Login`;
-const Login = ({ SetIsLogin }) => {
+const Login = ({ setJwtToken }) => {
   const navigate = useNavigate();
   const handleSubmit = async (values) => {
     try {
-      // Создаем объект с данными для отправки
       const dataToSend = {
         username: values.username,
         password: values.password,
       };
-      // Отправляем POST-запрос на сервер
-      const response = await axios.post(serverBaseUrl, dataToSend);
 
-      // Обрабатываем ответ от сервера
-      console.log("Ответ от сервера:", response.data);
-      SetIsLogin(response.data);
-      navigate("/");
+      const response = await axios.post(loginUrl, dataToSend);
+
+      if (response.status === 200) {
+        setJwtToken(response.data.token);
+        navigate("/");
+      }
+      else{
+        navigate("/")
+      }
     } catch (error) {
       console.error("Ошибка при отправке запроса:", error);
     }
@@ -69,6 +71,7 @@ const Login = ({ SetIsLogin }) => {
                   type="password"
                   name="password"
                   placeholder="Пароль"
+                  autoComplete="off"
                   className={styles.input}
                 />
               </div>
