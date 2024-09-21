@@ -3,31 +3,31 @@ import FirstPage from "./Components/FirstPage/FirstPage";
 import Registration from "./Components/RegistrationLogin/Registration";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Components/RegistrationLogin/Login";
-import axios from "axios";
+import Cookies from "js-cookie";
 
 function App() {
-  const [jwtLogin, setJwtToken] = useState('');
-  const [isLogin, setIsLogin] = useState(false); // отправка с локал стороджа токина для проверки
-    /* useEffect(() => {
-      const serverBaseUrl = `${process.env.REACT_APP_SERVER_BASE_URL}/AuthUser/CheckAuth`;
-      axios
-        .get(serverBaseUrl)
-        .then((response) => {
-          console.log(response.data.isAuthenticated);
-          SetIsLogin(response.data.isAuthenticated);
-          console.log(isLogin);
-        })
-        .catch((error) => {
-          console.error("Ошибка при проверке авторизации:", error);
-        });
-    }, []); */
+  const [jwtToken, setJwtToken] = useState(
+    Cookies.get("token") || "");
+  const [isLogin, setIsLogin] = useState(false); 
+
+    useEffect(() => {
+      if(jwtToken !== ""){
+        setIsLogin(true)
+      }    
+    }, [jwtToken]);
+    
   return (
     <>
       <Routes>
-        <Route path="/" Component={() => <FirstPage isLogin={isLogin} />} />
+        <Route
+          path="/"
+          Component={() => (
+            <FirstPage isLogin={isLogin} setIsLogin={setIsLogin} />
+          )}
+        />
         <Route
           path="/login"
-          Component={() => <Login SetIsLogin={setJwtToken} />}
+          Component={() => <Login setJwtToken={setJwtToken} />}
         />
         <Route path="/registration" Component={() => <Registration />} />
       </Routes>

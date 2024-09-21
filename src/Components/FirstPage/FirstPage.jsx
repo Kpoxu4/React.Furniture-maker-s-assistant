@@ -5,12 +5,12 @@ import styles from "./firstPage.module.css";
 import { Link } from 'react-router-dom';
 import FirstPageIsLogin from './FirstPageIsLogin'
 
-const FirstPage = ({ isLogin }) => {
+const FirstPage = ({ isLogin, setIsLogin }) => {
   return (
     <>
       {isLogin && (
         <>
-          <FirstPageIsLogin />
+          <FirstPageIsLogin setIsLogin={setIsLogin} />
         </>
       )}
       {!isLogin && (
