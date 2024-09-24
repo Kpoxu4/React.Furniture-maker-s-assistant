@@ -28,8 +28,22 @@ const FirstPageIsLogin = ({setIsLogin}) => {
 
   return (
     <div className={`${styles.wrapperIsLogin} ${styles.wrapper}`}>
-      <Logo></Logo>      
-      <h1 className={`${styles.titleIslogin} ${styles.title}`}>Добро пожаловать {name}</h1>
+      <Logo></Logo>
+      <h1 className={`${styles.titleIslogin} ${styles.title}`}>
+        Добро пожаловать, {name}
+      </h1>
+      <Link to="/createNewOrder">
+        <Button>Создать новый заказ</Button>
+      </Link>
+      <Link to="/viewAllOrders">
+        <Button>Посмотреть все заказы</Button>
+      </Link>
+      <Link to="/viewCompletedOrders">
+        <Button>Посмотреть выполненые заказы</Button>
+      </Link>
+      <Link to="/viewOutstandingOrders">
+        <Button>Посмотреть не выполненые заказы</Button>
+      </Link>
       <Link to="/" onClick={handleLinkClick}>
         <Button>Выйти с профиля</Button>
       </Link>
