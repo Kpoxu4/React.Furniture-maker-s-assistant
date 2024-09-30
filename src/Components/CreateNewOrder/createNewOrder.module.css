@@ -4,10 +4,11 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: beige;
+  background: rgb(132, 162, 163);
   background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
+
 }
 .anotherClass {
     width: 600px;   

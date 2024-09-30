@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import stylesInput from "../RegistrationLogin/registration.module.css";
 import styles from "./createNewOrder.module.css";
+import { Link } from "react-router-dom";
+import Button from "../Button/Button"
+import { createOrder } from "../../Endpoints/endpoints";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 
 const validationSchema = Yup.object({
@@ -19,16 +24,25 @@ const validationSchema = Yup.object({
   advancePayment: Yup.string()
     .required("Обязательное поле")
     .matches(/^\d+$/, "Только числами"),
-  orderEndTime: Yup.string()
+  productionTime: Yup.string()
     .required("Обязательное поле")
     .matches(/^\d+$/, "Только числами"),
 });
 
+
 const СreateNewOrder = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [userId, setUserId] = useState("");
   const imageUrl = `${process.env.PUBLIC_URL}/images/logo.png`; 
 
-  const handleSubmit = async (values) => {       
+  useEffect(() => {
+    const token = Cookies.get("token");
+    const decodToken = jwtDecode(token);
+    const userId = decodToken.id;
+    setUserId(userId);
+  }, []);
+
+  const handleSubmit = async (values) => {   
     try {      
       const dataToSend = {
         firstLastName: values.firstLastName,
@@ -37,10 +51,13 @@ const СreateNewOrder = () => {
         productName: values.productName,
         productPrice: values.productPrice,
         advancePayment: values.advancePayment,
-        orderEndTime: values.orderEndTime,
+        productionTime: values.productionTime,
+        userId: userId,
       };
-     
-      const response = await axios.post("/end point server", dataToSend);
+
+      const response = await axios.post(createOrder, dataToSend);
+      
+      console.log(dataToSend);
 
       if (response.status === 200) {
         setErrorMessage('')       
@@ -71,6 +88,7 @@ const СreateNewOrder = () => {
       >
         <Form className={styles.form}>
           <div className={`${stylesInput.wrapper} ${styles.anotherClass}`}>
+            {/* name */}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
@@ -84,7 +102,7 @@ const СreateNewOrder = () => {
                 <ErrorMessage name="firstLastName" component="div" />
               </div>
             </div>
-
+            {/*adress*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
@@ -98,13 +116,13 @@ const СreateNewOrder = () => {
                 <ErrorMessage name="address" component="div" />
               </div>
             </div>
-
+            {/*phone*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
                   type="phoneNumber"
                   name="phone"
-                  placeholder="телефон"
+                  placeholder="Телефон"
                   className={stylesInput.input}
                 />
               </div>
@@ -112,7 +130,7 @@ const СreateNewOrder = () => {
                 <ErrorMessage name="phone" component="div" />
               </div>
             </div>
-
+            {/*productName*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
@@ -126,7 +144,7 @@ const СreateNewOrder = () => {
                 <ErrorMessage name="productName" component="div" />
               </div>
             </div>
-
+            {/*productPrice*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
@@ -140,7 +158,7 @@ const СreateNewOrder = () => {
                 <ErrorMessage name="productPrice" component="div" />
               </div>
             </div>
-
+            {/*advancePayment*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
@@ -151,16 +169,16 @@ const СreateNewOrder = () => {
                 />
               </div>
               <div className={stylesInput.error}>
-                <ErrorMessage name="Предоплата" component="div" />
+                <ErrorMessage name="advancePayment" component="div" />
               </div>
             </div>
-
+            {/*productionTime*/}
             <div className={stylesInput.wrapperInput}>
               <div className={stylesInput.custom_input}>
                 <Field
                   type="number"
                   name="productionTime"
-                  placeholder="то 1 до 12 недель"
+                  placeholder="Срок изготовления от 1 до 12 недель"
                   className={stylesInput.input}
                 />
               </div>
@@ -169,6 +187,19 @@ const СreateNewOrder = () => {
               </div>
             </div>
           </div>
+
+          <div className={stylesInput.submitWrapper}>
+            <Button type="submit">Создать</Button>
+          </div>
+
+          <Link to="/">
+            <div
+              className={stylesInput.submitWrapper}
+              style={{ marginTop: "20px" }}
+            >
+              <Button>Назад</Button>
+            </div>
+          </Link>
         </Form>
       </Formik>
     </div>
